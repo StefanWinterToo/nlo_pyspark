@@ -6,6 +6,8 @@ from pyspark.sql.functions import *
 from extract import *
 from transform import *
 import pyarrow.parquet as pq
+import pyarrow as pa
+from pyspark.sql.types import StructType
 
 
 def main():
@@ -27,9 +29,10 @@ def main():
 
     bets_silver = bets_bronze.join(trans_bronze, bets_bronze.sportsbook_id == trans_bronze.sportsbook_id, "left").drop(trans_bronze.sportsbook_id)
     bet_gold = bets_silver.select(["sportsbook_id", "account_id", "outcomes", "transactions"])
-    bet_gold.show()
-    
-    pq.write_table(bet_gold, './Case_1/bets_interview_completed.parquet')
+    bet_gold = bet_gold.select(["sportsbook_id", "account_id"])
+
+    pq.write_table(pa.Table.from_pandas(bet_gold.toPandas()),
+               './Case_1/bets_interview_completed.parquet')
 
 
 if __name__ == "__main__":
