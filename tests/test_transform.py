@@ -21,9 +21,6 @@ def test_add_outcomes_to_bets_bronze(spark_session):
     # Perform assertions on the transformed DataFrame
     assert "outcomes" in transformed_df.columns
 
-    # Additional assertions or checks can be added based on specific requirements
-    # ...
-
 
 def test_trans_transactions(spark_session):
     # Create a SparkSession for testing
