@@ -8,7 +8,7 @@ def add_outcomes_to_bets_bronze(df) -> DataFrame:
     df = df.withColumn("outcomes", transform(arrays_zip(col("legs"), col("markets")), lambda x: x))
     return df
 
-def trans_transactions(df):
+def trans_transactions(df) -> DataFrame:
     """
     returns a dataframe with the transactions of the bets in the bronze table
     """
