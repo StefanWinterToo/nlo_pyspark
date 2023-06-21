@@ -5,10 +5,7 @@ from pyspark.sql.session import SparkSession
 from pyspark.sql.functions import *
 from extract import *
 from transform import *
-import pyarrow.parquet as pq
-import pyarrow as pa
-from pyspark.sql.types import StructType
-
+from load import *
 
 def main():
     spark = SparkSession.builder.appName("case").getOrCreate()
@@ -27,12 +24,11 @@ def main():
     except Exception as e:
         print("Couldn't process data: ", str(e))
 
-    bets_silver = bets_bronze.join(trans_bronze, bets_bronze.sportsbook_id == trans_bronze.sportsbook_id, "left").drop(trans_bronze.sportsbook_id)
-    bet_gold = bets_silver.select(["sportsbook_id", "account_id", "outcomes", "transactions"])
-    bet_gold = bet_gold.select(["sportsbook_id", "account_id"])
-
-    pq.write_table(pa.Table.from_pandas(bet_gold.toPandas()),
-               './Case_1/bets_interview_completed.parquet')
+    # Load Data
+    try:
+        load_data(bets_bronze, trans_bronze)
+    except Exception as e:
+        print("Couldn't write data: ", e)
 
 
 if __name__ == "__main__":
