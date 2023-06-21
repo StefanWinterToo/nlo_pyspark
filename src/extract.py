@@ -18,7 +18,7 @@ def extract_bets(spark, debug = 0) -> DataFrame:
     df_bets = spark.read.parquet("./Case_1/bets_v1/part-00000-4ea82782-6afd-434c-8fee-42264167ffe1-c000.snappy.parquet")
     # Cast some fields
     df_bets = df_bets.withColumn("account_id", col("account_id").cast('int'))
-    df_bets = df_bets.withColumn("legs", transform(col("legs"), lambda x, i: x.price.withField("decimal", x.price.decimal.cast('float'))))
+    df_bets = df_bets.withColumn("legs", transform(col("legs"), lambda x: x.price.withField("decimal", x.price.decimal.cast('float'))))
     
     if debug == 1:
         df_bets.show(truncate=0)

@@ -1,6 +1,3 @@
-import pyspark
-from pyspark.sql import DataFrame
-from pyspark.context import SparkContext
 from pyspark.sql.session import SparkSession
 from pyspark.sql.functions import *
 from extract import *
